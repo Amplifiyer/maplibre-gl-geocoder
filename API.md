@@ -63,7 +63,7 @@ A geocoder component that works with maplibre
 
 ### Parameters
 
--   `geocoderApi` **[Object][55]** Any geocoder api that supports the functions reverseGeocode and forwardGeocode and returns a FeatureCollection of results
+-   `geocoderApi` **[Object][55]** Any geocoder api that supports the functions reverseGeocode and forwardGeocode and returns a response which includes a FeatureCollection of results
 -   `options` **[Object][55]** 
     -   `options.maplibregl` **[Object][55]?** A [maplibre-gl][56] instance to use when creating [Markers][57]. Required if `options.marker` is `true`.
     -   `options.zoom` **[Number][58]** On geocoded result what zoom level should the map animate to when a `bbox` isn't found in the response. If a `bbox` is found the map will fit to the `bbox`. (optional, default `16`)
@@ -106,6 +106,10 @@ A geocoder component that works with maplibre
 ### Examples
 
 ```javascript
+var GeoApi = { 
+  forwardGeocode: (config) => { return { features: [] } },
+  reverseGeocode: (config) => { return { features: [] } } 
+}
 var geocoder = new MaplibreGeocoder(GeoApi, {});
 map.addControl(geocoder);
 ```
@@ -126,6 +130,10 @@ It will also throw an error if the referenced HTML element cannot be found in th
 For example, if the HTML body contains the element `<div id='geocoder-container'></div>`, the following script will append the geocoder to `#geocoder-container`:
 
 ```javascript
+var GeoApi = {
+  forwardGeocode: (config) => { return { features: [] } },
+  reverseGeocode: (config) => { return { features: [] } }
+}
 var geocoder = new MaplibreGeocoder(GeoAPI, {});
 geocoder.addTo('#geocoder-container');
 ```
@@ -362,7 +370,7 @@ Set the geocoding api used by the plugin.
 #### Parameters
 
 -   `geocoderApi` **[Object][55]** An API which contains reverseGeocode and forwardGeocode functions to be used by this plugin
-    -   `geocoderApi.forwardGeocode` **[Function][65]** Forward geocode function should return a collection of Features in [Carmen GeoJSON][66] format
+    -   `geocoderApi.forwardGeocode` **[Function][65]** Forward geocode function should return an object including a collection of Features in [Carmen GeoJSON][66] format
         -   `geocoderApi.forwardGeocode.config` **[Object][55]** Query parameters
             -   `geocoderApi.forwardGeocode.config.query` **[String][62]** Search query string
             -   `geocoderApi.forwardGeocode.config.limit` **[Number][58]** Number of results to limit by
@@ -372,7 +380,7 @@ Set the geocoding api used by the plugin.
             -   `geocoderApi.forwardGeocode.config.types` **[Array][63]** a comma seperated list of types that filter results to match those specified. See [https://docs.mapbox.com/api/search/#data-types][64] for available types. If reverseGeocode is enabled, you should specify one type. If you configure more than one type, the first type will be used.
             -   `geocoderApi.forwardGeocode.config.language` **[String][62]** Specify the language to use for response text and query result weighting. Options are IETF language tags comprised of a mandatory ISO 639-1 language code and optionally one or more IETF subtags for country or script. More than one value can also be specified, separated by commas. Defaults to the browser's language settings.
             -   `geocoderApi.forwardGeocode.config.reverseMode` **(distance | score)** Set the factors that are used to sort nearby results.
-    -   `geocoderApi.reverseGeocode` **[Function][65]** Reverse geocode function should return a collection of Features in [Carmen GeoJSON][66] format
+    -   `geocoderApi.reverseGeocode` **[Function][65]** Reverse geocode function should return an object including a collection of Features in [Carmen GeoJSON][66] format
         -   `geocoderApi.reverseGeocode.config` **[Object][55]** Query parameters
             -   `geocoderApi.reverseGeocode.config.query` **[Object][55]** Search query coordinates
             -   `geocoderApi.reverseGeocode.config.limit` **[Number][58]** Number of results to limit by
@@ -389,7 +397,7 @@ Returns **[MaplibreGeocoder][68]** this
 
 Get the geocoding endpoint the plugin is currently set to
 
-Returns **[Function][65]** the endpoint URL
+Returns **[Object][55]** the geocoding API
 
 ### on
 
